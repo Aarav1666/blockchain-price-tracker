@@ -1,0 +1,30 @@
+// prisma/schema.prisma
+// npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Price {
+  id        Int      @id @default(autoincrement())
+  name      String
+  symbol    String
+  usd_price     Float
+  usd_price_24hr_percent_change     Float
+  usd_price_24hr_usd_change     Float
+  usd_value_24hr_usd_change     Float
+  timestamp DateTime @default(now())
+}
+
+model UserAlert {
+  id        Int      @id @default(autoincrement())
+  chain     String
+  price     Float
+  email     String
+  createdAt DateTime @default(now())
+}

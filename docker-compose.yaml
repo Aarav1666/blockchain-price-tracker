@@ -1,0 +1,29 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
+    volumes:
+      - ./docker-entrypoint.sh:/docker-entrypoint.sh
+    entrypoint: ['/docker-entrypoint.sh']
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
